@@ -15,7 +15,6 @@ st.set_page_config(
 if "tela_ativa" not in st.session_state:
   st.session_state.tela_ativa = "INICIO"
 
-# --- CSS: COMPACTO E RESPONSIVO (PERFEITO PARA CELULARES) ---
 # --- CSS RESPONSIVO DE ALTO CONTRASTE (GRADE 2x2 NO MOBILE) ---
 st.markdown("""
 <style>
