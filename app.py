@@ -16,65 +16,44 @@ if "tela_ativa" not in st.session_state:
   st.session_state.tela_ativa = "INICIO"
 
 # --- CSS: DESIGN LIMPO, MAIÚSCULAS E FONTES PADRONIZADAS ---
-st.markdown(
-    """
+# --- CSS: COMPACTO E RESPONSIVO (PERFEITO PARA CELULARES) ---
+st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    
-    /* Botão do Título Principal (Voltar ao Início) */
+
+    /* Reduz o espaço em branco superior nativo do Streamlit */
+    .block-container {
+        padding-top: 1.5rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Botão do Título Principal */
     div[data-testid="stButton"].header-btn > button {
         background: #0f172a;
         color: #ffffff;
-        font-size: 22px;
+        font-size: 18px;
         font-weight: 800;
-        letter-spacing: 1px;
-        border-radius: 12px;
+        letter-spacing: 0.8px;
+        border-radius: 10px;
         border: none;
-        padding: 20px;
+        padding: 12px;
         width: 100%;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        cursor: pointer;
-    }
-    div[data-testid="stButton"].header-btn > button:hover {
-        background: #1e293b;
-        color: #38bdf8;
+        margin-bottom: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     /* Títulos de Seção Padronizados */
     .section-title {
-        font-size: 18px !important;
+        font-size: 16px !important;
         font-weight: 700 !important;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
-        color: #0f172a;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    /* Cards de Métricas Inferiores */
-    div[data-testid="stMetric"] {
-        background: #f1f5f9;
-        border: 1px solid #cbd5e1;
-        padding: 16px 14px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-    }
-    div[data-testid="stMetricLabel"] {
-        font-weight: 700;
-        color: #475569;
-        font-size: 11px;
-        text-transform: uppercase;
         letter-spacing: 0.5px;
-        display: flex;
-        justify-content: center;
-    }
-    div[data-testid="stMetricValue"] {
+        text-transform: uppercase;
         color: #0f172a;
-        font-weight: 800;
-        font-size: 20px;
         text-align: center;
+        margin-bottom: 12px;
     }
 
     /* Botões Principais de Navegação */
@@ -82,10 +61,10 @@ st.markdown(
         background-color: #1e293b;
         color: #ffffff;
         font-weight: 700;
-        font-size: 14px;
-        letter-spacing: 0.8px;
-        padding: 16px 20px;
-        border-radius: 10px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        padding: 10px 14px;
+        border-radius: 8px;
         border: 1px solid #334155;
         width: 100%;
         transition: all 0.2s ease-in-out;
@@ -95,11 +74,49 @@ st.markdown(
         color: #38bdf8;
         border-color: #38bdf8;
     }
-</style>
-""",
-    unsafe_allow_html=True,
-)
 
+    /* Cards de Métricas Compactos */
+    div[data-testid="stMetric"] {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        padding: 10px 12px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    div[data-testid="stMetricLabel"] {
+        font-weight: 700;
+        color: #475569;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: flex;
+        justify-content: center;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    /* Ajustes Específicos para Celular (Telas até 768px) */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+        }
+        /* Reduz o espaço vertical entre os elementos empilhados no mobile */
+        div[data-testid="column"] {
+            margin-bottom: -6px;
+        }
+        div.stButton > button {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # --- BANCO DE DADOS LOCAL (SQLite) ---
 def get_db():
