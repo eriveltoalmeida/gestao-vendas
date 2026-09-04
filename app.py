@@ -624,7 +624,7 @@ elif st.session_state.tela_ativa == "RELATORIOS":
 
 st.write("")
 
-# --- CARDS DE MÉTRICAS (2x2 NATIVO) ---
+# --- CARDS DE MÉTRICAS (GRADE 2x2 INFALÍVEL EM QUALQUER DISPOSITIVO) ---
 df_produtos_geral = pd.read_sql_query("SELECT COUNT(id) as total_modelos, SUM(estoque) as total_pecas FROM produtos", conn)
 df_vendas_metricas = pd.read_sql_query("SELECT SUM(preco_vendido * quantidade) as faturamento_total, SUM(lucro_liquido) as lucro_total FROM vendas", conn)
 
@@ -635,18 +635,29 @@ lucro_acumulado = df_vendas_metricas["lucro_total"].iloc[0] or 0.0
 
 margem_percentual = (lucro_acumulado / faturamento_acumulado * 100) if faturamento_acumulado > 0 else 0.0
 
-st.write("")
+html_cards = f"""
+<table style="width: 100%; border-collapse: separate; border-spacing: 6px; margin-top: 10px;">
+    <tr>
+        <td style="width: 50%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px 6px; text-align: center;">
+            <div style="color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">MODELOS</div>
+            <div style="color: #ffffff; font-size: 18px; font-weight: 800; margin-top: 4px;">{int(total_modelos)} TIPOS</div>
+        </td>
+        <td style="width: 50%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px 6px; text-align: center;">
+            <div style="color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">ESTOQUE</div>
+            <div style="color: #ffffff; font-size: 18px; font-weight: 800; margin-top: 4px;">{int(total_pecas)} PEÇAS</div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 50%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px 6px; text-align: center;">
+            <div style="color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">LUCRO LÍQUIDO</div>
+            <div style="color: #ffffff; font-size: 18px; font-weight: 800; margin-top: 4px;">R$ {lucro_acumulado:,.2f}</div>
+        </td>
+        <td style="width: 50%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px 6px; text-align: center;">
+            <div style="color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">MARGEM REAL</div>
+            <div style="color: #ffffff; font-size: 18px; font-weight: 800; margin-top: 4px;">{margem_percentual:.1f}%</div>
+        </td>
+    </tr>
+</table>
+"""
 
-# Linha 1 (2 cards emparelhados)
-r1_c1, r1_c2 = st.columns(2)
-with r1_c1:
-    st.metric("MODELOS", f"{int(total_modelos)} TIPOS")
-with r1_c2:
-    st.metric("ESTOQUE", f"{int(total_pecas)} PEÇAS")
-
-# Linha 2 (2 cards emparelhados)
-r2_c1, r2_c2 = st.columns(2)
-with r2_c1:
-    st.metric("LUCRO LÍQUIDO", f"R$ {lucro_acumulado:,.2f}")
-with r2_c2:
-    st.metric("MARGEM REAL", f"{margem_percentual:.1f}%")
+st.markdown(html_cards, unsafe_allow_html=True)
