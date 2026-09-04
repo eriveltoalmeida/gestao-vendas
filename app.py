@@ -25,7 +25,7 @@ st.markdown("""
     /* Reduz o espaço em branco superior nativo do Streamlit */
     .block-container {
         padding-top: 1.5rem !important;
-        padding-bottom: 2rem !important;
+        padding-bottom: 1.5rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
     }
