@@ -15,39 +15,44 @@ st.set_page_config(
 if "tela_ativa" not in st.session_state:
   st.session_state.tela_ativa = "INICIO"
 
-# --- CSS: DESIGN LIMPO, MAIÚSCULAS E FONTES PADRONIZADAS ---
 # --- CSS: COMPACTO E RESPONSIVO (PERFEITO PARA CELULARES) ---
+# --- CSS RESPONSIVO DE ALTO CONTRASTE (GRADE 2x2 NO MOBILE) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-    /* Reduz o espaço em branco superior nativo do Streamlit */
-    .block-container {
-        padding-top: 1.5rem !important;
-        padding-bottom: 1.5rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+    /* Oculta a barra padrão superior do Streamlit para ganhar tela limpa */
+    header[data-testid="stHeader"] {
+        display: none !important;
     }
 
-    /* Botão do Título Principal */
+    /* Espaçamento geral da tela */
+    .block-container {
+        padding-top: 1.2rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
+    }
+
+    /* Botão do Título Principal (Voltar ao Início) */
     div[data-testid="stButton"].header-btn > button {
         background: #0f172a;
         color: #ffffff;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 800;
         letter-spacing: 0.8px;
-        border-radius: 10px;
-        border: none;
+        border-radius: 8px;
+        border: 1px solid #1e293b;
         padding: 12px;
         width: 100%;
-        margin-bottom: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* Títulos de Seção Padronizados */
+    /* Títulos de Seção */
     .section-title {
-        font-size: 16px !important;
+        font-size: 15px !important;
         font-weight: 700 !important;
         letter-spacing: 0.5px;
         text-transform: uppercase;
@@ -56,63 +61,62 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Botões Principais de Navegação */
+    /* Botões Principais */
     div.stButton > button {
         background-color: #1e293b;
         color: #ffffff;
         font-weight: 700;
         font-size: 13px;
         letter-spacing: 0.5px;
-        padding: 10px 14px;
+        padding: 12px 14px;
         border-radius: 8px;
         border: 1px solid #334155;
         width: 100%;
         transition: all 0.2s ease-in-out;
     }
-    div.stButton > button:hover {
-        background-color: #334155;
-        color: #38bdf8;
-        border-color: #38bdf8;
-    }
 
-    /* Cards de Métricas Compactos */
+    /* Cards de Métricas com Contraste e Fonte Legível */
     div[data-testid="stMetric"] {
-        background: #f1f5f9;
+        background: #f8fafc;
         border: 1px solid #cbd5e1;
-        padding: 10px 12px;
+        padding: 10px 8px;
         border-radius: 8px;
         text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     div[data-testid="stMetricLabel"] {
-        font-weight: 700;
-        color: #475569;
-        font-size: 10px;
+        font-weight: 700 !important;
+        color: #334155 !important; /* Cor escura com alto contraste */
+        font-size: 10px !important;
         text-transform: uppercase;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.3px;
         display: flex;
         justify-content: center;
     }
     div[data-testid="stMetricValue"] {
-        color: #0f172a;
-        font-weight: 800;
-        font-size: 16px;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        font-size: 17px !important;
         text-align: center;
     }
 
-    /* Ajustes Específicos para Celular (Telas até 768px) */
+    /* REGRAS ESPECÍFICAS PARA CELULAR: Grade 2x2 para os Cards */
     @media (max-width: 768px) {
-        .block-container {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
+        /* Reduz o gap entre os 3 botões de ação */
+        div[data-testid="stHorizontalBlock"]:has(> div > div.stButton) {
+            gap: 6px !important;
         }
-        /* Reduz o espaço vertical entre os elementos empilhados no mobile */
-        div[data-testid="column"] {
-            margin-bottom: -6px;
+
+        /* Transforma as colunas dos cards em grade de 2 por linha */
+        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
         }
-        div.stButton > button {
-            padding: 8px 10px;
-            font-size: 12px;
+        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) > div[data-testid="column"] {
+            flex: 1 1 calc(50% - 8px) !important;
+            min-width: calc(50% - 8px) !important;
+            margin-bottom: 0px !important;
         }
     }
 </style>
