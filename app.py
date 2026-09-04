@@ -15,26 +15,22 @@ st.set_page_config(
 if "tela_ativa" not in st.session_state:
   st.session_state.tela_ativa = "INICIO"
 
-# --- CSS RESPONSIVO DE ALTO CONTRASTE (GRADE 2x2 NO MOBILE) ---
+# --- CSS RESPONSIVO ENXUTO ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-    /* Oculta a barra padrão superior do Streamlit para ganhar tela limpa */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-
-    /* Espaçamento geral da tela */
+    header[data-testid="stHeader"] { display: none !important; }
+    
     .block-container {
-        padding-top: 1.2rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
     }
 
-    /* Botão do Título Principal (Voltar ao Início) */
+    /* Botão Título */
     div[data-testid="stButton"].header-btn > button {
         background: #0f172a;
         color: #ffffff;
@@ -43,21 +39,9 @@ st.markdown("""
         letter-spacing: 0.8px;
         border-radius: 8px;
         border: 1px solid #1e293b;
-        padding: 12px;
+        padding: 10px;
         width: 100%;
-        margin-bottom: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    /* Títulos de Seção */
-    .section-title {
-        font-size: 15px !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        color: #0f172a;
-        text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 6px;
     }
 
     /* Botões Principais */
@@ -67,56 +51,39 @@ st.markdown("""
         font-weight: 700;
         font-size: 13px;
         letter-spacing: 0.5px;
-        padding: 12px 14px;
+        padding: 10px;
         border-radius: 8px;
         border: 1px solid #334155;
         width: 100%;
-        transition: all 0.2s ease-in-out;
     }
 
-    /* Cards de Métricas com Contraste e Fonte Legível */
-    div[data-testid="stMetric"] {
-        background: #f8fafc;
+    /* Grade 2x2 Nativa para os Cards */
+    .metric-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 12px;
+    }
+    .metric-card {
+        background-color: #f8fafc;
         border: 1px solid #cbd5e1;
-        padding: 10px 8px;
         border-radius: 8px;
+        padding: 10px 6px;
         text-align: center;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    div[data-testid="stMetricLabel"] {
-        font-weight: 700 !important;
-        color: #334155 !important; /* Cor escura com alto contraste */
-        font-size: 10px !important;
+    .metric-title {
+        font-size: 10px;
+        font-weight: 700;
+        color: #475569;
         text-transform: uppercase;
-        letter-spacing: 0.3px;
-        display: flex;
-        justify-content: center;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
     }
-    div[data-testid="stMetricValue"] {
-        color: #0f172a !important;
-        font-weight: 800 !important;
-        font-size: 17px !important;
-        text-align: center;
-    }
-
-    /* REGRAS ESPECÍFICAS PARA CELULAR: Grade 2x2 para os Cards */
-    @media (max-width: 768px) {
-        /* Reduz o gap entre os 3 botões de ação */
-        div[data-testid="stHorizontalBlock"]:has(> div > div.stButton) {
-            gap: 6px !important;
-        }
-
-        /* Transforma as colunas dos cards em grade de 2 por linha */
-        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            gap: 8px !important;
-        }
-        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) > div[data-testid="column"] {
-            flex: 1 1 calc(50% - 8px) !important;
-            min-width: calc(50% - 8px) !important;
-            margin-bottom: 0px !important;
-        }
+    .metric-number {
+        font-size: 17px;
+        font-weight: 800;
+        color: #0f172a;
     }
 </style>
 """, unsafe_allow_html=True)
