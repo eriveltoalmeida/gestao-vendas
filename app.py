@@ -15,7 +15,7 @@ st.set_page_config(
 if "tela_ativa" not in st.session_state:
   st.session_state.tela_ativa = "INICIO"
 
-# --- CSS RESPONSIVO ENXUTO ---
+# --- CSS NATIVO ESTÁVEL ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -24,8 +24,8 @@ st.markdown("""
     header[data-testid="stHeader"] { display: none !important; }
     
     .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
+        padding-top: 1.2rem !important;
+        padding-bottom: 1.5rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
     }
@@ -39,7 +39,7 @@ st.markdown("""
         letter-spacing: 0.8px;
         border-radius: 8px;
         border: 1px solid #1e293b;
-        padding: 10px;
+        padding: 12px;
         width: 100%;
         margin-bottom: 6px;
     }
@@ -51,39 +51,32 @@ st.markdown("""
         font-weight: 700;
         font-size: 13px;
         letter-spacing: 0.5px;
-        padding: 10px;
+        padding: 11px;
         border-radius: 8px;
         border: 1px solid #334155;
         width: 100%;
     }
 
-    /* Grade 2x2 Nativa para os Cards */
-    .metric-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-top: 12px;
+    /* Estilo dos Cards Nativos */
+    div[data-testid="stMetric"] {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        padding: 10px 8px !important;
+        border-radius: 8px !important;
+        text-align: center !important;
     }
-    .metric-card {
-        background-color: #f8fafc;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 10px 6px;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    div[data-testid="stMetricLabel"] {
+        color: #94a3b8 !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        justify-content: center !important;
     }
-    .metric-title {
-        font-size: 10px;
-        font-weight: 700;
-        color: #475569;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        margin-bottom: 4px;
-    }
-    .metric-number {
-        font-size: 17px;
-        font-weight: 800;
-        color: #0f172a;
+    div[data-testid="stMetricValue"] {
+        color: #f8fafc !important;
+        font-size: 18px !important;
+        font-weight: 800 !important;
+        text-align: center !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -631,33 +624,29 @@ elif st.session_state.tela_ativa == "RELATORIOS":
 
 st.write("")
 
-# --- 3) CARDS DE MÉTRICAS INFERIORES COM "MARGEM %" ---
-df_produtos_geral = pd.read_sql_query(
-    "SELECT COUNT(id) as total_modelos, SUM(estoque) as total_pecas FROM"
-    " produtos",
-    conn,
-)
-df_vendas_metricas = pd.read_sql_query(
-    "SELECT SUM(preco_vendido * quantidade) as faturamento_total,"
-    " SUM(lucro_liquido) as lucro_total FROM vendas",
-    conn,
-)
+# --- CARDS DE MÉTRICAS (2x2 NATIVO) ---
+df_produtos_geral = pd.read_sql_query("SELECT COUNT(id) as total_modelos, SUM(estoque) as total_pecas FROM produtos", conn)
+df_vendas_metricas = pd.read_sql_query("SELECT SUM(preco_vendido * quantidade) as faturamento_total, SUM(lucro_liquido) as lucro_total FROM vendas", conn)
 
 total_modelos = df_produtos_geral["total_modelos"].iloc[0] or 0
 total_pecas = df_produtos_geral["total_pecas"].iloc[0] or 0
-faturamento_acumulado = (
-    df_vendas_metricas["faturamento_total"].iloc[0] or 0.0
-)
+faturamento_acumulado = df_vendas_metricas["faturamento_total"].iloc[0] or 0.0
 lucro_acumulado = df_vendas_metricas["lucro_total"].iloc[0] or 0.0
 
-margem_percentual = (
-    (lucro_acumulado / faturamento_acumulado * 100)
-    if faturamento_acumulado > 0
-    else 0.0
-)
+margem_percentual = (lucro_acumulado / faturamento_acumulado * 100) if faturamento_acumulado > 0 else 0.0
 
-card_col1, card_col2, card_col3, card_col4 = st.columns(4)
-card_col1.metric("MODELOS CADASTRADOS", f"{int(total_modelos)} TIPOS")
-card_col2.metric("TOTAL EM ESTOQUE", f"{int(total_pecas)} PEÇAS")
-card_col3.metric("LUCRO LÍQUIDO REAL", f"R$ {lucro_acumulado:,.2f}")
-card_col4.metric("MARGEM REAL", f"{margem_percentual:.1f}%")
+st.write("")
+
+# Linha 1 (2 cards emparelhados)
+r1_c1, r1_c2 = st.columns(2)
+with r1_c1:
+    st.metric("MODELOS", f"{int(total_modelos)} TIPOS")
+with r1_c2:
+    st.metric("ESTOQUE", f"{int(total_pecas)} PEÇAS")
+
+# Linha 2 (2 cards emparelhados)
+r2_c1, r2_c2 = st.columns(2)
+with r2_c1:
+    st.metric("LUCRO LÍQUIDO", f"R$ {lucro_acumulado:,.2f}")
+with r2_c2:
+    st.metric("MARGEM REAL", f"{margem_percentual:.1f}%")
